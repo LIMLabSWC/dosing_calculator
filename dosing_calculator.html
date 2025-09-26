@@ -17,6 +17,15 @@
   @media(min-width:820px){ .grid{grid-template-columns:1fr 1fr} }
   .sep{height:1px;background:#e9ecef;margin:10px 0}
   @media print{ .noprint{display:none !important} }
+  .table-responsive{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .table th, .table td{white-space:nowrap;min-width:80px}
+  .table th:first-child, .table td:first-child{min-width:120px}
+  .table th:last-child, .table td:last-child{white-space:normal;min-width:150px}
+  @media(max-width:768px){
+    .edit-inputs{flex-direction:column;gap:4px}
+    .edit-inputs .form-control{max-width:100% !important}
+    .edit-inputs .text-muted{font-size:10px;margin:2px 0}
+  }
 </style>
 <!-- JavaScript libraries -->
 <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
@@ -47,21 +56,23 @@
 
     <div class="card p-3 mt-3">
       <h2 class="h6 mb-2">Calculated Volumes</h2>
-      <table id="resultTable" class="table table-sm">
-      <thead>
-        <tr>
-          <th>Drug</th><th>Route</th><th class="text-right">Dose (mg/kg) or Range (mL/100g)</th><th class="text-right">Stock (mg/mL)</th><th class="text-right">mL (mid)</th><th>Notes</th>
-        </tr>
-      </thead>
-      <tbody><!-- rows injected --></tbody>
-      <tfoot>
-        <tr>
-          <td colspan="4" class="text-right">Total (sum)</td>
-          <td class="text-right" id="totalMl">0.00</td>
-          <td></td>
-        </tr>
-      </tfoot>
-      </table>
+      <div class="table-responsive">
+        <table id="resultTable" class="table table-sm">
+        <thead>
+          <tr>
+            <th>Drug</th><th>Route</th><th class="text-right">Dose/Range</th><th class="text-right">Stock</th><th class="text-right">mL</th><th>Notes</th>
+          </tr>
+        </thead>
+        <tbody><!-- rows injected --></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4" class="text-right">Total (sum)</td>
+            <td class="text-right" id="totalMl">0.00</td>
+            <td></td>
+          </tr>
+        </tfoot>
+        </table>
+      </div>
     </div>
 
     <div class="card p-3 mt-3">
@@ -71,14 +82,16 @@
         <button class="btn btn-sm btn-warning noprint d-none" id="saveDefaults">Save</button>
         <button class="btn btn-sm btn-danger noprint d-none" id="resetDefaults">Reset to lab defaults</button>
       </div>
-      <table id="defaultsTable" class="table table-sm mt-2">
-      <thead>
-        <tr>
-          <th>Drug</th><th>Generic</th><th>Route</th><th class="text-right">Dose (mg/kg)</th><th class="text-right">Stock (mg/mL)</th><th class="text-right">max mL/kg</th><th>Notes</th>
-        </tr>
-      </thead>
-      <tbody><!-- defaults injected --></tbody>
-      </table>
+      <div class="table-responsive">
+        <table id="defaultsTable" class="table table-sm mt-2">
+        <thead>
+          <tr>
+            <th>Drug</th><th>Generic</th><th>Route</th><th class="text-right">Dose (mg/kg)</th><th class="text-right">Stock (mg/mL)</th><th class="text-right">max mL/kg</th><th>Notes</th>
+          </tr>
+        </thead>
+        <tbody><!-- defaults injected --></tbody>
+        </table>
+      </div>
       <div class="text-muted small">These values are displayed and used in the calculation. Edit them here if your SOP changes. Saved to your browser (localStorage) on this machine.</div>
     </div>
 
@@ -238,13 +251,13 @@ function renderDefaultsTable(){
       <td>${editing ? `<input type="text" data-f="route" data-i="${i}" value="${d.route||""}">` : (d.route||"")}</td>
       <td class="text-right">
         ${editing ? `
-          <div class="d-flex align-items-center justify-content-end" style="gap:6px">
+          <div class="edit-inputs d-flex align-items-center justify-content-end" style="gap:6px">
             <input type="number" step="0.01" min="0" class="form-control form-control-sm" style="max-width:90px" placeholder="dose mg/kg" data-f="dose_mg_per_kg" data-i="${i}" value="${d.dose_mg_per_kg ?? ""}">
             <span class="text-muted small">or mg/kg range</span>
             <input type="number" step="0.01" min="0" class="form-control form-control-sm" style="max-width:90px" placeholder="min" data-f="dose_min_mg_per_kg" data-i="${i}" value="${d.dose_min_mg_per_kg ?? ""}">
             <input type="number" step="0.01" min="0" class="form-control form-control-sm" style="max-width:90px" placeholder="max" data-f="dose_max_mg_per_kg" data-i="${i}" value="${d.dose_max_mg_per_kg ?? ""}">
           </div>
-          <div class="d-flex align-items-center justify-content-end mt-1" style="gap:6px">
+          <div class="edit-inputs d-flex align-items-center justify-content-end mt-1" style="gap:6px">
             <span class="text-muted small">or mL/100g range</span>
             <input type="number" step="0.001" min="0" class="form-control form-control-sm" style="max-width:90px" placeholder="min" data-f="volume_min_ml_per_100g" data-i="${i}" value="${d.volume_min_ml_per_100g ?? ""}">
             <input type="number" step="0.001" min="0" class="form-control form-control-sm" style="max-width:90px" placeholder="max" data-f="volume_max_ml_per_100g" data-i="${i}" value="${d.volume_max_ml_per_100g ?? ""}">
@@ -315,5 +328,3 @@ document.addEventListener("DOMContentLoaded", ()=>{
 </script>
 </body>
 </html>
-
-
