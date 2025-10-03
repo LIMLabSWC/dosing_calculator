@@ -3,7 +3,7 @@
 Single-page **HTML calculator** for animal surgery doses.  
 Computes injection volumes (mL) from animal weight using our SOP defaults.
 
-👉 Public page: [https://limlabswc.github.io/dosing_calculator/dosing_calculator.html](https://limlabswc.github.io/dosing_calculator/dosing_calculator.html)
+👉 [Public page](dosing.lim.bio)
 
 ## Lab Hosting
 
